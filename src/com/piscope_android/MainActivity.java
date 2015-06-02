@@ -1,5 +1,7 @@
-package com.example.piscope_android;
+package com.piscope_android;
 
+
+import com.example.piscope_android.R;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;

@@ -1,5 +1,7 @@
-package com.example.piscope_android;
+package com.piscope_android;
 
+
+import com.example.piscope_android.R;
 
 import android.content.Context;
 import android.content.DialogInterface;
