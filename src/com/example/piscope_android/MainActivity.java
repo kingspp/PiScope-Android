@@ -29,11 +29,27 @@ public class MainActivity extends ActionBarActivity {
 	public String url = "http://192.168.0.99";
 	public String uname;
 	public String passwd;
+	public String about;
 	@SuppressLint("SetJavaScriptEnabled")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		try {
+			about = "Android Application\n"
+					+ "Version   : "
+					+ getPackageManager().getPackageInfo(
+							getPackageName(), 0).versionName
+					+ "\n"
+					+ "Team : Prathyush SP\n"
+					+ "             Amaraprabhu C\n"
+					+ "             Shashikiran MS\n"
+					+ "             Vinay DC\n"
+					+ "Email :  kingspprathyush@gmail.com\n";
+		} catch (NameNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		// Shared Pref check
 		SharedPreferences prefs = getSharedPreferences("Preferences.xml",
 				MODE_PRIVATE);
@@ -119,28 +135,17 @@ public class MainActivity extends ActionBarActivity {
 		} else if (id == R.id.action_about) {
 			AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
 					this);
-			alertDialogBuilder.setTitle("About MAHADASARA");
-			try {
-				alertDialogBuilder
-						.setMessage(
-								"Android Application\n"
-										+ "Version   : "
-										+ getPackageManager().getPackageInfo(
-												getPackageName(), 0).versionName
-										+ "\n"
-										+ "Developer : Prathyush SP\n"
-										+ "Email     : kingspprathyush@gmail.com\n")
-						.setCancelable(false)
-						.setNeutralButton("Close",
-								new DialogInterface.OnClickListener() {
-									public void onClick(DialogInterface dialog,
-											int id) {
-										dialog.cancel();
-									}
-								});
-			} catch (NameNotFoundException e) {
-				e.printStackTrace();
-			}
+			alertDialogBuilder.setTitle("About PiScope");
+			alertDialogBuilder
+					.setMessage(about)
+					.setCancelable(false)
+					.setNeutralButton("Close",
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int id) {
+									dialog.cancel();
+								}
+							});
 			AlertDialog alertDialog = alertDialogBuilder.create();
 			alertDialog.show();
 			return true;
