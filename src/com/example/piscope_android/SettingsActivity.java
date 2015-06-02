@@ -1,25 +1,26 @@
 package com.example.piscope_android;
 
 
-
-
-
-import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AlertDialog;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class SettingsActivity extends ActionBarActivity {
-	
+	boolean setChanged = false;
 	TextView ipaddr;
 	String url="";
 	Button ipsave;
@@ -33,10 +34,21 @@ public class SettingsActivity extends ActionBarActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_settings);
-		
+		ipaddr= (TextView) findViewById(R.id.textView3);
 		username=(EditText)findViewById(R.id.editText2);
 		password=(EditText)findViewById(R.id.editText1);
-		ipaddr= (TextView) findViewById(R.id.textView3);
+		
+		AlertDialog.Builder alert = new AlertDialog.Builder(this);
+		final EditText ipaddress = new EditText(this);
+		
+		SharedPreferences prefs = getSharedPreferences("Preferences.xml",
+				MODE_PRIVATE);
+		Boolean key = prefs.getBoolean("checkbox", false);
+		url=prefs.getString("ip", "192.168.0.99");
+		uname=prefs.getString("uname", "admin");
+		passwd=prefs.getString("passwd", "1234");
+		username.setText(uname);
+		password.setText(passwd);
 		ipaddr.setText(url);
 		ipsave = (Button)findViewById(R.id.button1);
 		ipsave.setOnClickListener(new View.OnClickListener() {
@@ -83,24 +95,113 @@ public class SettingsActivity extends ActionBarActivity {
 	       /* Alert Dialog Code End*/ 
 	        }
 	    });
+		
+		url = prefs.getString("ip", "192.168.0.99");
+		
+		final CheckBox ch = (CheckBox) findViewById(R.id.checkBox);
+		ch.setChecked(key);
+		ch.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if (ch.isChecked()) {
+					writesetOn();
+				} else if (!ch.isChecked()) {
+					writesetoff();
+				}
+			}
+
+			private void writesetoff() {
+				setChanged = true;
+				SharedPreferences prefs = getSharedPreferences(
+						"Preferences.xml", MODE_PRIVATE);
+				SharedPreferences.Editor editor = prefs.edit();
+				editor.putBoolean("checkbox", false);
+				editor.commit(); //
+			}
+			
+			
+
+			private void writesetOn() {
+				setChanged = true;
+				Toast.makeText(getApplicationContext(), "Enjoy Full screen",
+						Toast.LENGTH_LONG).show();
+				SharedPreferences prefs = getSharedPreferences(
+						"Preferences.xml", MODE_PRIVATE);
+				SharedPreferences.Editor editor = prefs.edit();
+				editor.putBoolean("checkbox", true);
+				editor.commit(); //
+			}
+		});
 	}
 
+	void savePrefs(){
+		uname = username.getText().toString();
+		passwd = password.getText().toString();
+		SharedPreferences prefs = getSharedPreferences(
+				"Preferences.xml", MODE_PRIVATE);
+		SharedPreferences.Editor editor = prefs.edit();
+		editor.putString("uname", uname);
+		editor.putString("passwd", passwd);
+		editor.commit(); 
+		
+	}
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.settings, menu);
 		return true;
 	}
-
+	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
 		if (id == R.id.action_settings) {
+			Toast.makeText(context,"Saving Configuration",Toast.LENGTH_LONG).show();
+			savePrefs();
+			return true;			
+		}
+		else if (id == R.id.action_about) {
+			AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+					this);
+			alertDialogBuilder.setTitle("About MAHADASARA");
+			try {
+				alertDialogBuilder
+						.setMessage(
+								"Android Application\n"
+										+ "Version   : "
+										+ getPackageManager().getPackageInfo(
+												getPackageName(), 0).versionName
+										+ "\n"
+										+ "Developer : Prathyush SP\n"
+										+ "Email     : kingspprathyush@gmail.com\n")
+						.setCancelable(false)
+						.setNeutralButton("Close",
+								new DialogInterface.OnClickListener() {
+									public void onClick(DialogInterface dialog,
+											int id) {
+										dialog.cancel();
+									}
+								});
+			} catch (NameNotFoundException e) {
+				e.printStackTrace();
+			}
+			AlertDialog alertDialog = alertDialogBuilder.create();
+			alertDialog.show();
 			return true;
 		}
+
+		
 		return super.onOptionsItemSelected(item);
+	}
+	
+	@Override
+	public void onBackPressed() {
+		if (setChanged = true) {
+			Intent i = getBaseContext().getPackageManager()
+					.getLaunchIntentForPackage(
+							getBaseContext().getPackageName());
+			i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			startActivity(i);
+		}
 	}
 }
