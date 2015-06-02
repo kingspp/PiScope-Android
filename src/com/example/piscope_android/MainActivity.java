@@ -3,6 +3,7 @@ package com.example.piscope_android;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -30,6 +31,8 @@ public class MainActivity extends ActionBarActivity {
 	public String uname;
 	public String passwd;
 	public String about;
+	ProgressDialog mProgress;
+	
 	@SuppressLint("SetJavaScriptEnabled")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -75,13 +78,14 @@ public class MainActivity extends ActionBarActivity {
 		}
 		// Web view block
 		browser = (WebView) findViewById(R.id.webview);
-		browser.getSettings().setJavaScriptEnabled(true);		
+		browser.getSettings().setJavaScriptEnabled(true);
 		browser.getSettings()
 				.setUserAgentString(
 						"Mozilla/5.0 (Linux; Android 4.0.4; Galaxy Nexus Build/IMM76B) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.133 Mobile Safari/535.19");
 		browser.setWebViewClient(new MyBrowser());
 		browser.setWebViewClient(new MyWebViewClient());
 		browser.loadUrl("http://" + url);
+		mProgress = ProgressDialog.show(this, "Loading", "Please wait for a moment...");
 		// Ads block
 
 	}
@@ -102,22 +106,7 @@ public class MainActivity extends ActionBarActivity {
 		return activeNetworkInfo != null && activeNetworkInfo.isConnected();
 	}
 
-	public abstract class AdListener {
-		public void onAdLoaded() {
-		}
-
-		public void onAdFailedToLoad(int errorCode) {
-		}
-
-		public void onAdOpened() {
-		}
-
-		public void onAdClosed() {
-		}
-
-		public void onAdLeftApplication() {
-		}
-	}
+	
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
