@@ -4,6 +4,8 @@ package com.example.piscope_android;
 
 
 
+
+
 import android.support.v7.app.ActionBarActivity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -15,11 +17,18 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.webkit.HttpAuthHandler;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Toast;
 
 
 public class MainActivity extends ActionBarActivity {
 
+	
+	private WebView browser;
+	public String url = "http://www.google.com";
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -34,6 +43,16 @@ public class MainActivity extends ActionBarActivity {
 							"You are viewing a cached version", Toast.LENGTH_LONG)
 							.show();
 				}
+				
+				// Web view block
+				browser = (WebView) findViewById(R.id.webview);
+				browser.getSettings().setJavaScriptEnabled(true);		
+				browser.getSettings()
+						.setUserAgentString(
+								"Mozilla/5.0 (Linux; Android 4.0.4; Galaxy Nexus Build/IMM76B) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.133 Mobile Safari/535.19");
+				browser.setWebViewClient(new MyBrowser());
+				browser.setWebViewClient(new MyWebViewClient());
+				browser.loadUrl("http://" + url);
 	}
 	
 	private boolean isNetworkAvailable() {
@@ -41,6 +60,23 @@ public class MainActivity extends ActionBarActivity {
 		NetworkInfo activeNetworkInfo = connectivityManager
 				.getActiveNetworkInfo();
 		return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+	}
+	
+	private class MyWebViewClient extends WebViewClient {
+		@Override
+		public void onReceivedHttpAuthRequest(WebView view,
+				HttpAuthHandler handler, String host, String realm) {
+			
+
+		}
+	}
+	
+	private class MyBrowser extends WebViewClient {
+		@Override
+		public boolean shouldOverrideUrlLoading(WebView view, String url) {
+			view.loadUrl(url);
+			return true;
+		}
 	}
 
 	@Override
