@@ -2,8 +2,13 @@ package com.example.piscope_android;
 
 
 
+
+
 import android.support.v7.app.ActionBarActivity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -33,6 +38,38 @@ public class MainActivity extends ActionBarActivity {
 		if (id == R.id.action_settings) {
 			Intent i = new Intent(this, SettingsActivity.class);
 			startActivity(i);
+			return true;
+		}
+		else if (id == R.id.action_about) {
+			AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+					this);
+			alertDialogBuilder.setTitle("About PiScope");
+			try {
+				alertDialogBuilder
+						.setMessage(
+								"Android Application\n"
+										+ "Version   : "
+										+ getPackageManager().getPackageInfo(
+												getPackageName(), 0).versionName
+										+ "\n"
+										+ "Team : Prathyush SP\n"
+										+ "               Vinay DC\n"
+										+ "               Amaraprabhu C\n"
+										+ "               Shashikiran MS\n"
+										+ "Email     : kingspprathyush@gmail.com\n")
+						.setCancelable(false)
+						.setNeutralButton("Close",
+								new DialogInterface.OnClickListener() {
+									public void onClick(DialogInterface dialog,
+											int id) {
+										dialog.cancel();
+									}
+								});
+			} catch (NameNotFoundException e) {
+				e.printStackTrace();
+			}
+			AlertDialog alertDialog = alertDialogBuilder.create();
+			alertDialog.show();
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
