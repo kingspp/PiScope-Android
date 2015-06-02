@@ -2,6 +2,8 @@ package com.example.piscope_android;
 
 
 
+
+
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AlertDialog;
 import android.content.Context;
@@ -21,6 +23,10 @@ public class SettingsActivity extends ActionBarActivity {
 	TextView ipaddr;
 	String url="";
 	Button ipsave;
+	EditText username;
+	EditText password;
+	String uname;
+	String passwd;
 	final Context context = this;
 	
 	@Override
@@ -28,6 +34,8 @@ public class SettingsActivity extends ActionBarActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_settings);
 		
+		username=(EditText)findViewById(R.id.editText2);
+		password=(EditText)findViewById(R.id.editText1);
 		ipaddr= (TextView) findViewById(R.id.textView3);
 		ipaddr.setText(url);
 		ipsave = (Button)findViewById(R.id.button1);
