@@ -82,7 +82,7 @@ public class MainActivity extends ActionBarActivity {
 		browser.getSettings()
 				.setUserAgentString(
 						"Mozilla/5.0 (Linux; Android 4.0.4; Galaxy Nexus Build/IMM76B) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.133 Mobile Safari/535.19");
-		browser.setWebViewClient(new MyBrowser());
+		//browser.setWebViewClient(new MyBrowser());
 		browser.setWebViewClient(new MyWebViewClient());
 		browser.loadUrl("http://" + url);
 		mProgress = ProgressDialog.show(this, "Loading", "Please wait for a moment...");
@@ -91,11 +91,33 @@ public class MainActivity extends ActionBarActivity {
 	}
 
 	private class MyWebViewClient extends WebViewClient {
+		
 		@Override
 		public void onReceivedHttpAuthRequest(WebView view,
 				HttpAuthHandler handler, String host, String realm) {
 			handler.proceed(uname, passwd);
+		}
+		
+		 public boolean shouldOverrideUrlLoading(WebView view, String url) {
+             view.loadUrl(url);
+             return true;
+         }          
+ 
+            // when finish loading page
+            public void onPageFinished(WebView view, String url) {
+                if(mProgress.isShowing()) {
+                    mProgress.dismiss();
+                }
+            }
 
+		
+	}
+	
+	private class MyBrowser extends WebViewClient {
+		@Override
+		public boolean shouldOverrideUrlLoading(WebView view, String url) {
+			view.loadUrl(url);
+			return true;
 		}
 	}
 
@@ -151,13 +173,7 @@ public class MainActivity extends ActionBarActivity {
 		return super.onOptionsItemSelected(item);
 	}
 
-	private class MyBrowser extends WebViewClient {
-		@Override
-		public boolean shouldOverrideUrlLoading(WebView view, String url) {
-			view.loadUrl(url);
-			return true;
-		}
-	}
+	
 
 	// Exit function
 	private Boolean exit = false;
