@@ -1,5 +1,6 @@
 package com.example.piscope_android;
 
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -22,11 +23,19 @@ public class MainActivity extends ActionBarActivity {
 	
 	private WebView browser;
 	public String url = "http://www.google.com";
-	
+	boolean key = false; 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		
+		if (key == true) {
+			ActionBar actionBar = getSupportActionBar();
+			actionBar.hide();
+		} else {
+			ActionBar actionBar = getSupportActionBar();
+			actionBar.show();
+		}
 		
 		// Check for Internet
 				if (!isNetworkAvailable()) {
