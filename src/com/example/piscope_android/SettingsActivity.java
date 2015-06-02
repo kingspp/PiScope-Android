@@ -29,7 +29,7 @@ public class SettingsActivity extends ActionBarActivity {
 	String uname;
 	String passwd;
 	final Context context = this;
-	
+	String about;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -37,6 +37,22 @@ public class SettingsActivity extends ActionBarActivity {
 		ipaddr= (TextView) findViewById(R.id.textView3);
 		username=(EditText)findViewById(R.id.editText2);
 		password=(EditText)findViewById(R.id.editText1);
+		
+		try {
+			about = "Android Application\n"
+					+ "Version   : "
+					+ getPackageManager().getPackageInfo(
+							getPackageName(), 0).versionName
+					+ "\n"
+					+ "Team : Prathyush SP\n"
+					+ "             Amaraprabhu C\n"
+					+ "             Shashikiran MS\n"
+					+ "             Vinay DC\n"
+					+ "Email :  kingspprathyush@gmail.com\n";
+		} catch (NameNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		AlertDialog.Builder alert = new AlertDialog.Builder(this);
 		final EditText ipaddress = new EditText(this);
@@ -164,27 +180,16 @@ public class SettingsActivity extends ActionBarActivity {
 			AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
 					this);
 			alertDialogBuilder.setTitle("About MAHADASARA");
-			try {
-				alertDialogBuilder
-						.setMessage(
-								"Android Application\n"
-										+ "Version   : "
-										+ getPackageManager().getPackageInfo(
-												getPackageName(), 0).versionName
-										+ "\n"
-										+ "Developer : Prathyush SP\n"
-										+ "Email     : kingspprathyush@gmail.com\n")
-						.setCancelable(false)
-						.setNeutralButton("Close",
-								new DialogInterface.OnClickListener() {
-									public void onClick(DialogInterface dialog,
-											int id) {
-										dialog.cancel();
-									}
-								});
-			} catch (NameNotFoundException e) {
-				e.printStackTrace();
-			}
+			alertDialogBuilder
+					.setMessage(about)
+					.setCancelable(false)
+					.setNeutralButton("Close",
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int id) {
+									dialog.cancel();
+								}
+							});
 			AlertDialog alertDialog = alertDialogBuilder.create();
 			alertDialog.show();
 			return true;
