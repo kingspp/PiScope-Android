@@ -1,11 +1,5 @@
 package com.example.piscope_android;
 
-
-
-
-
-
-
 import android.support.v7.app.ActionBarActivity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -128,6 +122,15 @@ public class MainActivity extends ActionBarActivity {
 			AlertDialog alertDialog = alertDialogBuilder.create();
 			alertDialog.show();
 			return true;
+		}
+		
+		else if (id == R.id.action_reload) {
+			browser.clearCache(true);
+			Toast.makeText(getApplicationContext(), "Clearing cache... ",
+					Toast.LENGTH_LONG).show();
+			browser.loadUrl(url);
+			Toast.makeText(getApplicationContext(), "Loading...",
+					Toast.LENGTH_LONG).show();
 		}
 		return super.onOptionsItemSelected(item);
 	}
