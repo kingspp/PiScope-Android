@@ -6,12 +6,16 @@ package com.example.piscope_android;
 
 import android.support.v7.app.ActionBarActivity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -20,6 +24,23 @@ public class MainActivity extends ActionBarActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		
+		// Check for Internet
+				if (!isNetworkAvailable()) {
+					Toast.makeText(getApplicationContext(),
+							"No Internet Connection. Please try again . . ",
+							Toast.LENGTH_LONG).show();
+					Toast.makeText(getApplicationContext(),
+							"You are viewing a cached version", Toast.LENGTH_LONG)
+							.show();
+				}
+	}
+	
+	private boolean isNetworkAvailable() {
+		ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo activeNetworkInfo = connectivityManager
+				.getActiveNetworkInfo();
+		return activeNetworkInfo != null && activeNetworkInfo.isConnected();
 	}
 
 	@Override
